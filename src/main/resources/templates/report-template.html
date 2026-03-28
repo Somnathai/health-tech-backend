@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            color: #2d3748;
+            background-color: #ffffff;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* ── FOOTER: fixed to bottom only, top is auto ── */
+        .page-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            top: auto;
+            height: 34px;
+            background-color: #1a2f4e;
+            padding: 0 40px;
+        }
+
+        .footer-left {
+            float: left;
+            line-height: 34px;
+            color: #60a5fa;
+            font-weight: bold;
+            font-size: 10px;
+        }
+
+        .footer-right {
+            float: right;
+            line-height: 34px;
+            font-size: 10px;
+            color: #a0aec0;
+        }
+
+        /* ── HEADER BANNER: flush to very top, no margin ── */
+        .report-banner {
+            background-color: #1a2f4e;
+            padding: 22px 40px 18px 40px;
+            text-align: center;
+        }
+
+        .report-banner h1 {
+            font-size: 21px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
+
+        .banner-meta {
+            font-size: 11px;
+            color: #a0aec0;
+            letter-spacing: 0.5px;
+        }
+
+        .banner-meta span {
+            margin: 0 10px;
+        }
+
+        /* ── PAGE BODY: bottom padding reserves space for fixed footer ── */
+        .page-body {
+            padding: 26px 40px 50px 40px;
+        }
+
+        .doc-title {
+            text-align: center;
+            font-size: 17px;
+            font-weight: bold;
+            color: #1a2f4e;
+            margin-bottom: 22px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .section-heading {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1a2f4e;
+            margin: 22px 0 10px 0;
+        }
+
+        .card {
+            background-color: #f0f4f9;
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 13px;
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #1a2f4e;
+            margin-bottom: 11px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #d0daea;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .info-table td {
+            padding: 3px 0;
+            vertical-align: top;
+            width: 50%;
+            font-size: 12.5px;
+        }
+
+        .kv-label {
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .kv-value {
+            color: #4a5568;
+        }
+
+        /* ── BULLET LIST via table for perfect iText7 alignment ── */
+        .bullet-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .bullet-cell {
+            width: 16px;
+            color: #3498db;
+            font-weight: bold;
+            font-size: 15px;
+            vertical-align: top;
+            padding: 2px 0 2px 0;
+        }
+
+        .text-cell {
+            font-size: 12.5px;
+            color: #4a5568;
+            line-height: 1.6;
+            padding: 2px 0;
+        }
+
+        /* ── TESTS GRID ── */
+        .tests-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .tests-table td {
+            padding: 8px 10px 8px 0;
+            vertical-align: top;
+            width: 50%;
+        }
+
+        .tag {
+            display: inline-block;
+            font-size: 10.5px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+
+        .tag-0 { background-color: #dbeafe; color: #1e40af; }
+        .tag-1 { background-color: #fee2e2; color: #991b1b; }
+        .tag-2 { background-color: #dcfce7; color: #166534; }
+        .tag-3 { background-color: #fef9c3; color: #854d0e; }
+        .tag-4 { background-color: #f3e8ff; color: #6b21a8; }
+        .tag-5 { background-color: #ffedd5; color: #9a3412; }
+        .tag-6 { background-color: #e0f2fe; color: #075985; }
+        .tag-7 { background-color: #fce7f3; color: #9d174d; }
+
+        .test-value {
+            font-size: 12px;
+            color: #4a5568;
+            display: block;
+        }
+
+        .summary-text {
+            font-size: 12.5px;
+            line-height: 1.8;
+            color: #4a5568;
+            white-space: pre-wrap;
+        }
+
+        .alert-box {
+            background-color: #fff7ed;
+            border-left: 4px solid #f97316;
+            border-radius: 4px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+            font-size: 11.5px;
+            color: #7c2d12;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- FOOTER: bottom:0 top:auto — only anchors to bottom of each page -->
+
+
+    <!-- BANNER: flush to top, no margin needed -->
+    <div class="report-banner">
+        <h1>Clinical Intake Assessment</h1>
+        <div class="banner-meta">
+            <span>fatlosswithsahil@gmail.com</span>
+            <span>+91 6289983635</span>
+            <span>@fatlosswithsahil</span>
+        </div>
+    </div>
+
+    <div class="page-body">
+
+        <div class="doc-title">Clinical Intake Assessment Report</div>
+
+        <!-- SECTION I -->
+        <div class="section-heading">I. Patient Information</div>
+        <div class="card">
+            <div class="card-title">1. Demographics</div>
+            <table class="info-table">
+                <tr>
+                    <td>
+                        <span class="kv-label">Patient Email: </span>
+                        <span class="kv-value" th:text="${email}">patient@example.com</span>
+                    </td>
+                    <td>
+                        <span class="kv-label">Report Date: </span>
+                        <span class="kv-value" th:text="${date}">March 21, 2026</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="kv-label">Age: </span>
+                        <span class="kv-value" th:text="${age + ' years'}">36 years</span>
+                    </td>
+                    <td>
+                        <span class="kv-label">Report Type: </span>
+                        <span class="kv-value">Functional Health Assessment</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- SECTION II -->
+        <div class="section-heading">II. Identified Health Concerns</div>
+        <div class="card">
+            <div class="card-title">1. Problems List</div>
+            <table class="bullet-table">
+                <tr th:each="item : ${problemsList}">
+                    <td class="bullet-cell">&#8226;</td>
+                    <td class="text-cell" th:text="${item}">Problem item</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- SECTION III -->
+        <div class="section-heading">III. Recommendations</div>
+        <div class="card">
+            <div class="card-title">2. How to Cure</div>
+            <table class="bullet-table">
+                <tr th:each="item : ${howToCure}">
+                    <td class="bullet-cell">&#8226;</td>
+                    <td class="text-cell" th:text="${item}">Recommendation item</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- SECTION IV -->
+        <div class="section-heading">IV. Suggested Diagnostic Tests</div>
+        <div class="card">
+            <div class="card-title">3. Laboratory &amp; Diagnostic Panel</div>
+            <table class="tests-table">
+                <tr th:each="test, iterStat : ${suggestedTests}"
+                    th:if="${iterStat.index % 2 == 0}">
+                    <td>
+                        <span class="tag"
+                              th:classappend="'tag-' + ${iterStat.index % 8}"
+                              th:text="${suggestedTests[iterStat.index].category}">Category</span>
+                        <span class="test-value"
+                              th:text="${suggestedTests[iterStat.index].tests}">Tests</span>
+                    </td>
+                    <td th:if="${iterStat.index + 1 < suggestedTests.size()}">
+                        <span class="tag"
+                              th:classappend="'tag-' + ${(iterStat.index + 1) % 8}"
+                              th:text="${suggestedTests[iterStat.index + 1].category}">Category</span>
+                        <span class="test-value"
+                              th:text="${suggestedTests[iterStat.index + 1].tests}">Tests</span>
+                    </td>
+                    <td th:unless="${iterStat.index + 1 < suggestedTests.size()}"></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- DISCLAIMER -->
+        <div class="alert-box">
+            <strong>Disclaimer:</strong> This report is generated based on self-reported symptoms and is for informational purposes only. It is not a substitute for professional medical diagnosis or treatment. Please consult a qualified healthcare provider.
+        </div>
+
+        <!-- SECTION V -->
+        <div class="section-heading">V. Clinical Summary</div>
+        <div class="card">
+            <div class="card-title">AI-Generated Overview</div>
+            <div class="summary-text" th:text="${clinicalSummary}">
+                Clinical summary will appear here.
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
