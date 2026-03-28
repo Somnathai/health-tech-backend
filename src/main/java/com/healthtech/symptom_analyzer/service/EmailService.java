@@ -1,25 +1,26 @@
 package com.healthtech.symptom_analyzer.service;
 
-import com.resend.Resend;
-import com.resend.core.exception.ResendException;
-import com.resend.services.emails.model.Attachment;
-import com.resend.services.emails.model.CreateEmailOptions;
-import com.resend.services.emails.model.CreateEmailResponse;
-import org.springframework.beans.factory.annotation.Value;
+import jakarta.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-
-import java.util.Base64;
-import java.util.List;
 
 @Service
 public class EmailService {
 
-    @Value("${resend.api.key}")
-    private String resendApiKey;
+    @Autowired
+    private JavaMailSender mailSender;
 
     public void sendReportWithAttachment(String toEmail, byte[] pdfBytes) {
         try {
-            Resend resend = new Resend(resendApiKey);
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            helper.setFrom("somnathbhakta475@gmail.com"); // just a display address
+            helper.setTo(toEmail);
+            helper.setSubject("Your Symptom Analysis & Clinical Report");
 
             String body = "Hello,\n\n"
                     + "Based on the symptoms you provided, our AI clinical engine has generated a preliminary report.\n\n"
@@ -27,23 +28,13 @@ public class EmailService {
                     + "Best regards,\n"
                     + "The Health Tech Team";
 
-            Attachment attachment = Attachment.builder()
-                    .fileName("Clinical_Report.pdf")
-                    .content(Base64.getEncoder().encodeToString(pdfBytes))
-                    .build();
+            helper.setText(body);
+            helper.addAttachment("Clinical_Report.pdf", new ByteArrayResource(pdfBytes));
 
-            CreateEmailOptions params = CreateEmailOptions.builder()
-                    .from("Health Tech <onboarding@resend.dev>") // use this for testing
-                    .to(List.of(toEmail))
-                    .subject("Your Symptom Analysis & Clinical Report")
-                    .text(body)
-                    .attachments(List.of(attachment))
-                    .build();
+            mailSender.send(message);
+            System.out.println("SUCCESS: Email sent to " + toEmail);
 
-            CreateEmailResponse response = resend.emails().send(params);
-            System.out.println("SUCCESS: Email sent to " + toEmail + " | ID: " + response.getId());
-
-        } catch (ResendException e) {
+        } catch (Exception e) {
             System.err.println("ERROR: Failed to send email to " + toEmail);
             e.printStackTrace();
         }
