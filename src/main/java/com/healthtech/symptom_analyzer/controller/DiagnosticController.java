@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.*;
         "https://health-tech-frontend-pi.vercel.app",
         "https://flshealth.online",
         "https://www.flshealth.online"
-})@RestController
+})
+@RestController
 @RequestMapping("/api/diagnostics")
 public class DiagnosticController {
 
