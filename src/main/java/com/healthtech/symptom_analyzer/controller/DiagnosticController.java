@@ -9,8 +9,7 @@ import com.healthtech.symptom_analyzer.service.PdfGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-@CrossOrigin(origins = {"http://localhost:5173", "https://your-frontend-name.vercel.app"})
+@CrossOrigin(origins = {"http://localhost:5173", "https://health-tech-frontend-pi.vercel.app"})
 @RestController
 @RequestMapping("/api/diagnostics")
 public class DiagnosticController {
