@@ -93,9 +93,9 @@
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.mailjet</groupId>
-			<artifactId>mailjet-client</artifactId>
-			<version>5.2.1</version>
+			<groupId>com.resend</groupId>
+			<artifactId>resend-java</artifactId>
+			<version>3.1.0</version>
 		</dependency>
 	</dependencies>
 
