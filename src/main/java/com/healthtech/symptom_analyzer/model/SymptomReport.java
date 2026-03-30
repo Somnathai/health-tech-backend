@@ -11,13 +11,14 @@ public class SymptomReport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String customerName;        // ← ADD
+    private String customerMobile;      // ← ADD
     private String customerEmail;
     private Integer age;
 
     @Column(columnDefinition = "TEXT")
     private String reportedSymptoms;
 
-    // ADDED THIS: The variable to hold the AI's response
     @Column(columnDefinition = "TEXT")
     private String aiGeneratedSummary;
 
@@ -28,10 +29,15 @@ public class SymptomReport {
         createdAt = LocalDateTime.now();
     }
 
-    // --- Getters and Setters ---
-
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
+    public String getCustomerName() { return customerName; }          // ← ADD
+    public void setCustomerName(String customerName) { this.customerName = customerName; } // ← ADD
+
+    public String getCustomerMobile() { return customerMobile; }      // ← ADD
+    public void setCustomerMobile(String customerMobile) { this.customerMobile = customerMobile; } // ← ADD
 
     public String getCustomerEmail() { return customerEmail; }
     public void setCustomerEmail(String customerEmail) { this.customerEmail = customerEmail; }
@@ -44,12 +50,6 @@ public class SymptomReport {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
 
-    // ADDED THIS: The Getter and Setter for the AI Summary
-    public String getAiGeneratedSummary() {
-        return aiGeneratedSummary;
-    }
-
-    public void setAiGeneratedSummary(String aiGeneratedSummary) {
-        this.aiGeneratedSummary = aiGeneratedSummary;
-    }
+    public String getAiGeneratedSummary() { return aiGeneratedSummary; }
+    public void setAiGeneratedSummary(String aiGeneratedSummary) { this.aiGeneratedSummary = aiGeneratedSummary; }
 }
