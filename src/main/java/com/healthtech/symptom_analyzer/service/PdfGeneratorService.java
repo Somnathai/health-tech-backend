@@ -43,8 +43,6 @@ public class PdfGeneratorService {
 
         // 1. Thymeleaf context
         Context context = new Context();
-        context.setVariable("name", report.getCustomerName());   // ← ADD
-        context.setVariable("mobile", report.getCustomerMobile());
         context.setVariable("email", report.getCustomerEmail());
         context.setVariable("age", report.getAge());
         context.setVariable("date", report.getCreatedAt().format(DateTimeFormatter.ofPattern("MMMM dd, yyyy")));
