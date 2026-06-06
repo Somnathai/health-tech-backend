@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
         "http://localhost:5173",
         "https://health-tech-frontend-pi.vercel.app",
         "https://flshealth.online",
+        "https://health-tech-frontend-git-main-somnathais-projects.vercel.app",
         "https://www.flshealth.online"
 })
 @RestController
