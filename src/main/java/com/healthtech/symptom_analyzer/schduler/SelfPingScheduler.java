@@ -13,7 +13,7 @@ public class SelfPingScheduler {
     public void keepAlive() {
         try {
             restTemplate.getForObject(
-                    "https://health-tech-api.onrender.com/actuator/health",
+                    "https://health-tech-backend-v0yj.onrender.com/actuator/health",
                     String.class
             );
             System.out.println("Keep-alive ping sent");
